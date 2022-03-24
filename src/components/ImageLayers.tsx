@@ -1,8 +1,10 @@
-import { Alert, Table } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
+import { Alert, Button, Table, Tooltip } from "antd";
 import { ColumnsType } from "antd/lib/table";
-import { FsLayer, HistoryEntry } from "../ApiTypes"
+import filesize from "filesize";
+import { FsLayer, HistoryEntry, RegistryApi } from "../ApiTypes"
 
-interface Tuple {
+interface TableRecord {
     order: number,
     cmd: string,
     fsLayer: FsLayer
@@ -30,9 +32,9 @@ export default function ImageLayers(props: { history: HistoryEntry[], fsLayers: 
     const fsLayers = props.fsLayers.reverse();
 
     if (history.length !== fsLayers.length) {
-        return (<>
+        return (
             <Alert message="Image History and Filesystem Layers' length do not match" type="error" />
-        </>);
+        );
     }
 
     const entries = history.map((historyEntry, index) => {
@@ -40,17 +42,33 @@ export default function ImageLayers(props: { history: HistoryEntry[], fsLayers: 
             order: index + 1,
             cmd: normalizeCommand(historyEntry.v1Compatibility.container_config.Cmd.map(cmd => cmd.trim()).join(" ")),
             fsLayer: fsLayers[index]
-        } as Tuple
+        } as TableRecord
     });
 
-    const columns: ColumnsType<Tuple> = [
+    const columns: ColumnsType<TableRecord> = [
         {
             title: "Order",
-            dataIndex: "order"
+            dataIndex: "order",
+            align: 'center'
         },
         {
             title: "Blob",
-            dataIndex: ["fsLayer", "blobSum"]
+            dataIndex: ["fsLayer", "blobSum"],
+            render: (text, record, index) => {
+                return (<Tooltip title={record.fsLayer.blobSum}>
+                    <Button type="link" shape="default" href={record.fsLayer.blobPath} icon={<DownloadOutlined />} />
+                </Tooltip>);
+            },
+            align: 'center'
+        },
+        {
+            title: "Size",
+            dataIndex: ["fsLayer", "blobSize"],
+            render: (text, record, index) => {
+                return (<>{filesize(record.fsLayer.blobSize)}</>);
+            },
+            width: "8em",
+            align: 'left'
         },
         {
             title: "Command",

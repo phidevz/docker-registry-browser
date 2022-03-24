@@ -18,7 +18,9 @@ export interface Manifest {
 }
 
 export interface FsLayer {
-    blobSum: string
+    blobSum: string,
+    blobSize: number,
+    blobPath: string
 }
 
 export interface HistoryEntry {
@@ -63,9 +65,13 @@ interface RawManifest {
     name: string,
     tag: string,
     architecture: string,
-    fsLayers: FsLayer[],
+    fsLayers: RawFsLayer[],
     history: RawHistoryEntry[],
     signatures: Signature[]
+}
+
+interface RawFsLayer {
+    blobSum: string
 }
 
 interface RawHistoryEntry {
@@ -110,9 +116,20 @@ export class RegistryApi {
 
         const rawManifest = json as RawManifest;
 
+        const fsLayers = await Promise.all(rawManifest.fsLayers.map(async fsLayer => {
+            const blobPath = `${this.baseUri}/${repository}/blobs/${fsLayer.blobSum}`;
+            const blobHead = await fetch(blobPath, { ...options, method: 'HEAD' });
+
+            return {
+                blobSum: fsLayer.blobSum,
+                blobSize: parseInt(blobHead.headers.get("content-length")!),
+                blobPath: blobPath
+            } as FsLayer
+        }));
+
         return {
             architecture: rawManifest.architecture,
-            fsLayers: rawManifest.fsLayers,
+            fsLayers: fsLayers,
             name: rawManifest.name,
             schemaVersion: rawManifest.schemaVersion,
             signatures: rawManifest.signatures,

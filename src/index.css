@@ -46,19 +46,26 @@ code {
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .manifest-command {
   word-break: break-all;
+}
+
+.footerContent {
+  color: gray;
+  border-top: 1px solid gray;
+  text-align: center;
+  padding-top: 1em;
+}
+
+.registry-icon {
+  margin-top: 0.4em;
+}
+
+.ant-layout-header {
+  height: unset !important;
+  min-height: 64px;
+}
+
+.registry-url {
+  vertical-align: middle;
 }
