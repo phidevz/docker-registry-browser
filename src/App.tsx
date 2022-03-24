@@ -1,6 +1,6 @@
 import { useEffect, useState, Key, useRef } from 'react';
-import { Alert, Layout, Menu, Tooltip, notification, Input, Skeleton, Tree, Row, Col, List } from 'antd';
-import { Catalog, RegistryApi, Manifest } from './ApiTypes';
+import { Alert, Layout, Tooltip, Input, Skeleton, Tree, Row, Col, List } from 'antd';
+import { RegistryApi, Manifest } from './ApiTypes';
 import { CloseCircleOutlined, CheckCircleOutlined, QuestionCircleOutlined, CodeOutlined } from '@ant-design/icons';
 
 import ImageLayers from './components/ImageLayers';

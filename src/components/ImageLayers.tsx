@@ -2,7 +2,7 @@ import { DownloadOutlined } from "@ant-design/icons";
 import { Alert, Button, Table, Tooltip } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import filesize from "filesize";
-import { FsLayer, HistoryEntry, RegistryApi } from "../ApiTypes"
+import { FsLayer, HistoryEntry } from "../ApiTypes"
 
 interface TableRecord {
     order: number,
