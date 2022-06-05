@@ -1,3 +1,12 @@
+/*
+ * Docker Registry Browser
+ * Copyright (c) 2022 phidevz
+ * 
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 export interface Catalog {
     repositories: string[]
 }
@@ -95,7 +104,7 @@ export class RegistryApi {
         this.baseUri = baseUri;
     }
 
-    async getVersion(): Promise<boolean> {
+    async isApiVersionSupported(): Promise<boolean> {
         const result = await fetch(`${this.baseUri}/`, options);
 
         return result.headers.get("docker-distribution-api-version") === "registry/2.0";

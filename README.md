@@ -16,11 +16,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 ### `npm run build`
 
 Builds the app for production to the `build` folder.\
@@ -39,4 +34,4 @@ If you operate the Registry Browser and the Registry with separate hostnames, ma
 
 ## License
 
-This project is [licensed under Apache-2.0](https://github.com/phidevz/docker-registry-browser/blob/main/LICENSE).
+This project is [licensed under MPL-2.0](https://github.com/phidevz/docker-registry-browser/blob/main/LICENSE).

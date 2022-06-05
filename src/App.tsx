@@ -1,5 +1,14 @@
+/*
+ * Docker Registry Browser
+ * Copyright (c) 2022 phidevz
+ * 
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 import { useEffect, useState, Key, useRef } from 'react';
-import { Alert, Layout, Tooltip, Input, Skeleton, Tree, Row, Col, List } from 'antd';
+import { Alert, Layout, Tooltip, Input, Skeleton, Tree, Row, Col, List, InputRef } from 'antd';
 import { RegistryApi, Manifest } from './ApiTypes';
 import { CloseCircleOutlined, CheckCircleOutlined, QuestionCircleOutlined, CodeOutlined } from '@ant-design/icons';
 
@@ -50,6 +59,7 @@ export default function App() {
   const [treeData, setTreeData] = useState<DataNode[]>([]);
   const [selectedManifest, setSelectedManifest] = useState<Manifest>();
   const apiRef = useRef<RegistryApi>();
+  const registryUrlRef = useRef<InputRef>(null);
 
   const onLoadData = async ({ key, children }: any) => {
     const api = apiRef.current;
@@ -122,7 +132,7 @@ export default function App() {
     apiRef.current = api;
 
     const fetchData = async () => {
-      const version = await api.getVersion();
+      const version = await api.isApiVersionSupported();
 
       switch (version) {
         case true:
@@ -146,6 +156,11 @@ export default function App() {
 
     fetchData().catch(setError);
   }, [backend]);
+  
+  if (backend !== undefined && registryUrlRef.current !== null && registryUrlRef.current.input !== null) {
+    registryUrlRef.current.input.defaultValue = backend;
+    registryUrlRef.current.input.value = backend;
+  }
 
   if (error) {
     throw error;
@@ -162,11 +177,13 @@ export default function App() {
           </Col>
           <Col md={12} xs={24}>
             <Search
+              ref={registryUrlRef}
               className='registry-url'
               addonBefore={(<Tooltip title={tooltipTitle} className="registry-icon">{tooltipIcon}</Tooltip>)}
               placeholder="Registry API URL"
               defaultValue={backend}
               loading={isLoading}
+              onChange={(e) => console.log(e)}
               onSearch={setBackend}
               enterButton={<Tooltip title="Update Registry URL and fetch new data"><CodeOutlined style={{ marginTop: '0.5em' }} /></Tooltip>} />
 
@@ -182,7 +199,7 @@ export default function App() {
                 <Tree loadData={onLoadData} onSelect={onSelect} treeData={treeData} />
               </Skeleton>
             </Col>
-            <Col style={{visibility: selectedManifest === undefined ? 'hidden' : 'visible'}} md={20} sm={24} flex="auto">
+            <Col style={{ visibility: selectedManifest === undefined ? 'hidden' : 'visible' }} md={20} sm={24} flex="auto">
               <h2>Manifest Details</h2>
               {selectedManifest && (<>
                 <List>
