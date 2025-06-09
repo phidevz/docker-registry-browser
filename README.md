@@ -1,5 +1,10 @@
 # Docker Registry Browser
 
+> [!IMPORTANT]
+> This project is archived because I do not actively maintain it.
+> 
+> There are other great projects which you can use AND get updates, e.g. [Joxit/docker-registry-ui](https://github.com/Joxit/docker-registry-ui).
+
 A simple [Docker registry](https://hub.docker.com/_/registry/) browser. Compatible with [version 2 of the HTTP API](https://docs.docker.com/registry/spec/api/).
 
 ## How to develop
